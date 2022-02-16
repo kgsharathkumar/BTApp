@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
@@ -13,6 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.sharath.btapp.btmodel.BLEConnectionManager
+import com.sharath.btapp.btmodel.BLEDeviceManager
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -29,6 +32,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val REQUEST_LOCATION_PERMISSION = 2018
     private val TAG = "MainActivity"
     private val REQUEST_ENABLE_BT = 1000
+
+    private var mDeviceAddress: String = ""
 
 
 
@@ -114,9 +119,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.btn_scan -> toastInfo("Scanning BT")
-
+            R.id.btn_scan -> {
+                toastInfo("Scanning BT");
+                scanDevice(true);
+            }
         }
+    }
+
+    private fun scanDevice(isContinuesScan: Boolean) {
+        if (!mDeviceAddress.isNullOrEmpty()) {
+            connectDevice()
+        } else {
+            BLEDeviceManager.scanBLEDevice(isContinuesScan)
+        }
+    }
+
+    private fun connectDevice() {
+        Handler().postDelayed({
+            BLEConnectionManager.initBLEService(this@MainActivity)
+            if (BLEConnectionManager.connect(mDeviceAddress)) {
+                Toast.makeText(this@MainActivity, "DEVICE CONNECTED", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity, "DEVICE CONNECTION FAILED", Toast.LENGTH_SHORT).show()
+            }
+        }, 100)
     }
 
     private fun toastInfo(toastMsg: String) {
