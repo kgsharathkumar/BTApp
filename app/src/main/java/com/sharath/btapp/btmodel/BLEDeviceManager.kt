@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.ParcelUuid
 import android.util.Log
+import com.sharath.btapp.MainActivity
 import java.util.ArrayList
 
 object BLEDeviceManager {
@@ -136,7 +137,7 @@ object BLEDeviceManager {
     /**
      * setListener
      */
-    fun setListener(onDeviceScanListener: OnDeviceScanListener) {
+    fun setListener(onDeviceScanListener: MainActivity) {
         mOnDeviceScanListener = onDeviceScanListener
     }
 

@@ -154,6 +154,8 @@ object BLEConnectionManager {
         }
     }
 
+
+
     fun readEmergencyGatt(UUID: String) {
         var gattCharacteristic =  BluetoothGattCharacteristic(java.util.UUID.
         fromString(UUID), BluetoothGattCharacteristic.PROPERTY_READ, BluetoothGattCharacteristic.PERMISSION_READ
